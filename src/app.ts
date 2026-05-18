@@ -1,4 +1,5 @@
 import express from "express";
+import route from "./routes/web";
 import path from "path";
 
 process.loadEnvFile?.();
@@ -12,10 +13,9 @@ app.use(express.json());
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+console.log('path views: ', path.join(__dirname, "views"));
 
-app.get("/", (req, res) => {
-  return res.status(200).json({ message: "Hello World!" });
-});
+app.use("/", route);
 
 app.listen(PORT, () => {
   console.log(`Server  running on: http://localhost:${PORT}`);

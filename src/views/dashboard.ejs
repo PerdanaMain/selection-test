@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Character Analytics</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <h2 class="mb-4 text-center border-bottom pb-3">Coding Selection (MVC + OOP)</h2>
+
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><%= editingTask ? 'Edit Analisis Data' : 'Analisis Karakter Baru' %></h5>
+          </div>
+          <div class="card-body">
+            <form action="<%= editingTask ? '/update/' + editingTask.getId() : '/analyze' %>" method="POST">
+              <div class="mb-3">
+                <label class="form-label">Input 1</label>
+                <input type="text" name="input1" class="form-urlencoded form-control" required value="<%= editingTask ? editingTask.input1 : '' %>" placeholder="Contoh: ABBCD">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Input 2</label>
+                <input type="text" name="input2" class="form-control" required value="<%= editingTask ? editingTask.input2 : '' %>" placeholder="Contoh: Gallant Duck">
+              </div>
+              <div class="mb-3">
+                <label class="form-label d-block">Tipe Pengecekan</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="caseType" id="case1" value="sensitive" <%= (editingTask && editingTask.isCaseSensitive) || !editingTask ? 'checked' : '' %>>
+                  <label class="form-check-input-label" for="case1">Case Sensitive</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="caseType" id="case2" value="non-sensitive" <%= editingTask && !editingTask.isCaseSensitive ? 'checked' : '' %>>
+                  <label class="form-check-input-label" for="case2">Non-Sensitive Case</label>
+                </div>
+              </div>
+              <button type="submit" class="btn <%= editingTask ? 'btn-warning' : 'btn-primary' %> w-100">
+                <%= editingTask ? 'Simpan Perubahan' : 'Mulai Hitung Persentase' %>
+              </button>
+              <% if(editingTask) { %>
+                <a href="/" class="btn btn-secondary w-100 mt-2">Batal</a>
+              <% } %>
+            </form>
+          </div>
+        </div>
+
+        <% if (result) { %>
+          <div class="card mt-4 border-success shadow-sm">
+            <div class="card-header bg-success text-white">Hasil Kalkulasi Terbaru</div>
+            <div class="card-body">
+              <h3 class="text-center text-success fw-bold"><%= result.percentage %>%</h3>
+              <p class="card-text small bg-light p-2 border rounded"><%= result.details %></p>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="col-md-7">
+        <div class="card shadow-sm">
+          <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Data Log & Hasil CRUD Tracker</h5>
+            <span class="badge bg-secondary">Total: <%= history.length %></span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Input 1</th>
+                    <th>Input 2</th>
+                    <th>Mode</th>
+                    <th>Hasil (%)</th>
+                    <th class="text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(history.length === 0) { %>
+                    <tr>
+                      <td colspan="5" class="text-center py-4 text-muted">Belum ada history data. Silahkan input di menu kiri.</td>
+                    </tr>
+                  <% } %>
+                  <% history.forEach(item => { %>
+                    <tr>
+                      <td><code><%= item.input1 %></code></td>
+                      <td><code><%= item.input2 %></code></td>
+                      <td>
+                        <span class="badge <%= item.isCaseSensitive ? 'bg-info' : 'bg-warning text-dark' %>">
+                          <%= item.isCaseSensitive ? 'Sensitive' : 'Ignore Case' %>
+                        </span>
+                      </td>
+                      <td class="fw-bold text-primary"><%= item.resultPercentage %>%</td>
+                      <td class="text-center">
+                        <div class="btn-group btn-group-sm">
+                          <a href="/edit/<%= item.getId() %>" class="btn btn-outline-warning">Edit</a>
+                          <a href="/delete/<%= item.getId() %>" class="btn btn-outline-danger" onclick="return confirm('Hapus data ini?')">Delete</a>
+                        </div>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
