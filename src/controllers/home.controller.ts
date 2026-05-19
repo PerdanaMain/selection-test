@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
+import { AnalysisTask } from "../models/AnalysisTask";
 
 type IdParam = { id: string };
-import { AnalysisTask } from "../models/AnalysisTask";
 
 const history: AnalysisTask[] = [];
 
@@ -28,9 +28,19 @@ export class HomeController {
     }
 
     const isCaseSensitive = caseType !== "non-sensitive";
-    const { percentage, details } = AnalysisTask.calculate(String(input1), String(input2), isCaseSensitive);
+    const { percentage, details } = AnalysisTask.calculate(
+      String(input1),
+      String(input2),
+      isCaseSensitive
+    );
 
-    const task = new AnalysisTask(String(input1), String(input2), isCaseSensitive, percentage, details);
+    const task = new AnalysisTask(
+      String(input1),
+      String(input2),
+      isCaseSensitive,
+      percentage,
+      details
+    );
     history.unshift(task);
 
     res.render("dashboard", {
@@ -67,9 +77,20 @@ export class HomeController {
     }
 
     const isCaseSensitive = caseType !== "non-sensitive";
-    const { percentage, details } = AnalysisTask.calculate(String(input1), String(input2), isCaseSensitive);
+    const { percentage, details } = AnalysisTask.calculate(
+      String(input1),
+      String(input2),
+      isCaseSensitive
+    );
 
-    const updated = new AnalysisTask(String(input1), String(input2), isCaseSensitive, percentage, details, id);
+    const updated = new AnalysisTask(
+      String(input1),
+      String(input2),
+      isCaseSensitive,
+      percentage,
+      details,
+      id
+    );
     history[index] = updated;
 
     res.redirect("/");

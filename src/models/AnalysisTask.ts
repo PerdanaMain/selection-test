@@ -1,7 +1,6 @@
-let idCounter = 1;
+import { BaseTask } from "./BaseTask";
 
-export class AnalysisTask {
-  private id: number;
+export class AnalysisTask extends BaseTask {
   public input1: string;
   public input2: string;
   public isCaseSensitive: boolean;
@@ -16,7 +15,7 @@ export class AnalysisTask {
     details: string,
     id?: number
   ) {
-    this.id = id ?? idCounter++;
+    super(id);
     this.input1 = input1;
     this.input2 = input2;
     this.isCaseSensitive = isCaseSensitive;
@@ -24,17 +23,42 @@ export class AnalysisTask {
     this.details = details;
   }
 
-  getId(): number {
-    return this.id;
+  getSummary(): string {
+    const mode = this.isCaseSensitive ? "sensitive" : "non-sensitive";
+    return `[${mode}] "${this.input1}" vs "${this.input2}" → ${this.resultPercentage}%`;
   }
 
-  static calculate(input1: string, input2: string, isCaseSensitive: boolean): { percentage: string; details: string } {
-    const s1 = isCaseSensitive ? input1 : input1.toLowerCase();
-    const s2 = isCaseSensitive ? input2 : input2.toLowerCase();
+  static calculate(
+    input1: string,
+    input2: string,
+    isCaseSensitive: boolean
+  ): { percentage: string; details: string } {
+    const chars1 = input1.split("");
+    const chars2 = input2.split("");
 
-    const matches = s1.split("").filter((char) => s2.includes(char));
-    const percentage = s1.length > 0 ? ((matches.length / s1.length) * 100).toFixed(2) : "0.00";
-    const details = `Found ${matches.length} of ${s1.length} characters from Input 1 present in Input 2.`;
+    let matchCount = 0;
+
+    for (const c1 of chars1) {
+      for (const c2 of chars2) {
+        if (isCaseSensitive) {
+          if (c1 === c2) {
+            matchCount++;
+            break;
+          }
+        } else {
+          if (c1.toLowerCase() === c2.toLowerCase()) {
+            matchCount++;
+            break;
+          }
+        }
+      }
+    }
+
+    const percentage =
+      chars1.length > 0
+        ? ((matchCount / chars1.length) * 100).toFixed(2)
+        : "0.00";
+    const details = `Found ${matchCount} of ${chars1.length} characters from Input 1 present in Input 2.`;
 
     return { percentage, details };
   }
