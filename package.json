@@ -14,7 +14,9 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "rootDir": "src",
-    "testMatch": ["**/__tests__/**/*.test.ts"]
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -22,7 +24,8 @@
   "packageManager": "pnpm@10.24.0",
   "dependencies": {
     "ejs": "^5.0.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
