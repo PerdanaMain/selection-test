@@ -126,3 +126,6 @@ Tests are located in `src/__tests__/` and run with Jest + ts-jest (no compilatio
 | `GET` | `/edit/:id` | Load a past task into the form for editing |
 | `POST` | `/update/:id` | Recalculate and update a past task |
 | `GET` | `/delete/:id` | Remove a task from history |
+
+## Demo URL
+[http://string-test.drleonid.my.id/](http://string-test.drleonid.my.id/)
